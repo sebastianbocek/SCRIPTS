@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>Chat Cifrado 🔐</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #f9f9f9;
+      border-radius: 12px;
+      box-shadow: 0 0 20px #ddd;
+    }
+    textarea, input, button {
+      width: 100%;
+      margin-top: 10px;
+      padding: 12px;
+      font-size: 18px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+    button {
+      background: #222;
+      color: white;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background: #444;
+    }
+    .output {
+      margin-top: 20px;
+      word-break: break-word;
+      white-space: pre-wrap;
+      position: relative;
+    }
+    .copy-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+    }
+    .notification {
+      color: green;
+      margin-top: 10px;
+      font-weight: bold;
+      font-size: 16px;
+      min-height: 24px;
+    }
+    label {
+      font-weight: bold;
+      margin-top: 15px;
+      display: block;
+      font-size: 18px;
+    }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+      body {
+        margin: 20px 10px;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 0 15px #ccc;
+      }
+      textarea, input, button {
+        font-size: 16px;
+        padding: 10px;
+      }
+      .copy-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 18px;
+        top: 8px;
+        right: 8px;
+      }
+      label {
+        font-size: 16px;
+        margin-top: 12px;
+      }
+      .notification {
+        font-size: 14px;
+        margin-top: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h2>🔐 Mensajes Cifrados</h2>
+
+  <label for="password">🔑 Contraseña (mínimo 10 caracteres):</label>
+  <input type="password" id="password" minlength="10" autocomplete="off" />
+
+  <label for="text">📝 Texto:</label>
+  <textarea id="text" rows="4" placeholder="Escribí tu mensaje o pegá texto cifrado aquí"></textarea>
+
+  <button onclick="encrypt()">Cifrar</button>
+  <button onclick="decrypt()">Descifrar</button>
+
+  <div class="output">
+    <h3>Resultado:</h3>
+    <textarea id="result" rows="6" readonly></textarea>
+    <button class="copy-btn" onclick="copyAndDestroy()" title="Copiar y autodestruir">📋</button>
+    <div class="notification" id="notification"></div>
+  </div>
+
+  <script>
+    async function getKeyAndIV(password, salt) {
+      const enc = new TextEncoder();
+      const keyMaterial = await window.crypto.subtle.importKey(
+        "raw",
+        enc.encode(password),
+        "PBKDF2",
+        false,
+        ["deriveKey"]
+      );
+      return await window.crypto.subtle.deriveKey(
+        {
+          name: "PBKDF2",
+          salt: salt,
+          iterations: 100000,
+          hash: "SHA-256"
+        },
+        keyMaterial,
+        { name: "AES-CBC", length: 256 },
+        false,
+        ["encrypt", "decrypt"]
+      );
+    }
+
+    function pad(text) {
+      const padLen = 16 - (text.length % 16);
+      return text + String.fromCharCode(padLen).repeat(padLen);
+    }
+
+    function unpad(text) {
+      const padLen = text.charCodeAt(text.length - 1);
+      return text.slice(0, -padLen);
+    }
+
+    async function encrypt() {
+      const password = document.getElementById("password").value;
+      const text = document.getElementById("text").value;
+
+      if (password.length < 10) {
+        alert("❌ La contraseña debe tener al menos 10 caracteres.");
+        return;
+      }
+
+      const enc = new TextEncoder();
+      const salt = window.crypto.getRandomValues(new Uint8Array(16));
+      const iv = window.crypto.getRandomValues(new Uint8Array(16));
+      const key = await getKeyAndIV(password, salt);
+      const padded = pad(text);
+
+      const encrypted = await window.crypto.subtle.encrypt(
+        { name: "AES-CBC", iv: iv },
+        key,
+        enc.encode(padded)
+      );
+
+      const combined = new Uint8Array([...salt, ...iv, ...new Uint8Array(encrypted)]);
+      const base64 = btoa(String.fromCharCode(...combined));
+      document.getElementById("result").value = base64;
+    }
+
+    async function decrypt() {
+      const password = document.getElementById("password").value;
+      const b64 = document.getElementById("text").value;
+
+      try {
+        const binaryStr = atob(b64);
+        const len = binaryStr.length;
+        const data = new Uint8Array(len);
+        for (let i = 0; i < len; i++) {
+          data[i] = binaryStr.charCodeAt(i);
+        }
+
+        const salt = data.slice(0, 16);
+        const iv = data.slice(16, 32);
+        const encrypted = data.slice(32);
+        const key = await getKeyAndIV(password, salt);
+
+        const decryptedBuffer = await window.crypto.subtle.decrypt(
+          { name: "AES-CBC", iv: iv },
+          key,
+          encrypted
+        );
+
+        let dec = "";
+        try {
+          dec = new TextDecoder("utf-8").decode(decryptedBuffer);
+        } catch (e) {
+          dec = "";
+        }
+
+        const clean = unpad(dec);
+        document.getElementById("result").value = clean;
+
+      } catch (e) {
+        // Falsa salida para contraseña incorrecta (modo sigiloso)
+        const fakeLength = 20 + Math.floor(Math.random() * 20);
+        const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!?@#_-/";
+        let fakeText = "";
+        for (let i = 0; i < fakeLength; i++) {
+          fakeText += charset[Math.floor(Math.random() * charset.length)];
+        }
+        document.getElementById("result").value = fakeText;
+      }
+    }
+
+    function copyAndDestroy() {
+      const result = document.getElementById("result");
+      const text = result.value.trim();
+      if (!text) return;
+
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(() => {
+          result.value = "";
+          showCopiedMessage();
+        }).catch(fallbackCopy);
+      } else {
+        fallbackCopy();
+      }
+
+      function fallbackCopy() {
+        const temp = document.createElement("textarea");
+        temp.value = text;
+        temp.setAttribute("readonly", "");
+        temp.style.position = "absolute";
+        temp.style.left = "-9999px";
+        document.body.appendChild(temp);
+        temp.select();
+        try {
+          const successful = document.execCommand("copy");
+          if (successful) {
+            result.value = "";
+            showCopiedMessage();
+          } else {
+            alert("❌ No se pudo copiar.");
+          }
+        } catch (err) {
+          alert("❌ Error al copiar.");
+        }
+        document.body.removeChild(temp);
+      }
+
+      function showCopiedMessage() {
+        const notif = document.getElementById("notification");
+        notif.innerText = "✅ Copiado y autodestruido 💣";
+        setTimeout(() => notif.innerText = "", 3000);
+      }
+    }
+  </script>
+</body>
+</html>

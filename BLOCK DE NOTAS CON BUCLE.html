@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bloc de Notas con Bucle</title>
+    <style>
+        textarea {
+            width: 100%;
+            height: 300px;
+            font-size: 16px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+    <h3>Bloc de Notas con Bucle</h3>
+    <textarea id="notepad"></textarea>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const textarea = document.getElementById("notepad");
+
+            textarea.addEventListener("keydown", function (event) {
+                let lines = textarea.value.split("\n");
+                let cursorPos = textarea.selectionStart;
+                let currentLineIndex = textarea.value.substr(0, cursorPos).split("\n").length - 1;
+
+                // Flecha abajo con bucle
+                if (event.key === "ArrowDown") {
+                    if (currentLineIndex >= lines.length - 1) {
+                        event.preventDefault();
+                        moveCursorToLine(1);
+                    }
+                }
+
+                // Copiar la línea actual con Ctrl + L sin mostrar alerta
+                if (event.ctrlKey && event.key.toLowerCase() === "l") {
+                    event.preventDefault();
+                    copyCurrentLine(currentLineIndex);
+                }
+            });
+
+            function moveCursorToLine(lineNumber) {
+                let lines = textarea.value.split("\n");
+                let position = 0;
+
+                for (let i = 0; i < lineNumber - 1; i++) {
+                    position += lines[i].length + 1;
+                }
+
+                textarea.setSelectionRange(position, position);
+            }
+
+            function copyCurrentLine(lineIndex) {
+                let lines = textarea.value.split("\n");
+                if (lineIndex >= 0 && lineIndex < lines.length) {
+                    navigator.clipboard.writeText(lines[lineIndex]);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
