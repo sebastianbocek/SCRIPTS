@@ -4,7 +4,7 @@ Este repositorio contiene una colección de **scripts automatizados en Python** 
 ---
 
 ### 🔐 CypherGram
-> Envía mensajes cifrados con una contraseña compartida. Nadie más podrá leer lo que digas.
+> Envía mensajes cifrados con una contraseña compartida. 
 
 - Cifrado y descifrado de texto
 - Clave secreta compartida entre vos y tu contacto
