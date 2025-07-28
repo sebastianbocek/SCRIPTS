@@ -52,4 +52,7 @@ Este repositorio contiene una colección de **scripts automatizados en Python** 
 
 ### ⚙️ ...Más scripts próximamente
 
+⚖️ Licencia
+MIT — Usalo con responsabilidad.
+
 
