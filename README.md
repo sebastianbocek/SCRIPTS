@@ -22,6 +22,20 @@ Este repositorio contiene una colección de **scripts automatizados en Python** 
 
 - Genera archivo whatsapplinks.txt con cada link.
 
+### 🛒 Facebook Marketplace Researcher
+
+> Automatiza la búsqueda de productos en Facebook Marketplace desde una ubicación específica.
+
+-Uso: python "Facebook Marketplace Researcher.py" -p "nombre_del_producto"
+
+-🗺 Ubicación: Modificá el link dentro del script:
+
+driver.get("https://www.facebook.com/marketplace/104099769626471/")
+
+Ese número representa la ubicación (ej: Posadas, Misiones).
+
+💡 Para encontrar el número de tu ciudad, buscá manualmente un producto en Marketplace y copiá el número de la URL.
+
 ### 📧 Automated Email Sender
 > Envío masivo de correos personalizados en segundos.
 
