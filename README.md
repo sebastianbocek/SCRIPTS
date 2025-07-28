@@ -1,7 +1,44 @@
-# SCRIPTS
--CypherGram (enviá un mensaje cifrado y descifrá con la contraseña que solo vos y tu amigo saben)
--Automated Email Sender - Envio masivo de emails
--Instagram Video Downloader - Descargá todos los videos de un perfil de instagram.
--Email Scraper - Scrapea emails desde un archivo llamado websites.txt
--Block de notas con Bucle - para insertar lista infinita en macro
--...
+# SCRIPTS 
+
+Este repositorio contiene una colección de **scripts automatizados en Python** pensados para tareas cotidianas, hacking ético, productividad y automatización. Ideales para freelancers, marketers, emprendedores o cualquier entusiasta del poder del código.
+
+---
+
+### 🔐 CypherGram
+> Envía mensajes cifrados con una contraseña compartida. Nadie más podrá leer lo que digas.
+
+- Encriptación y desencriptación de texto
+- Clave secreta compartida entre vos y tu contacto
+- Ideal para enviar mensajes seguros por cualquier medio
+
+### 📧 Automated Email Sender
+> Envío masivo de correos personalizados en segundos.
+
+- Lee destinatarios desde archivo
+- Soporta HTML o texto plano
+- Útil para campañas simples, alertas o testing
+
+### 📸 Instagram Video Downloader
+> Descargá **todos los videos** públicos de un perfil de Instagram.
+
+- Solo con el nombre de usuario
+- Guarda los videos en una carpeta local
+- Útil para recopilar contenido o archivarlo
+
+### 📥 Email Scraper
+> Extrae emails automáticamente desde sitios web.
+
+- Lee URLs desde `websites.txt`
+- Extrae correos y los guarda en `emails.txt`
+- Filtra duplicados y valida formato
+
+### 📝 Bloc de Notas con Bucle
+> Script de escritura infinita para macros o bots.
+
+- Carga una lista infinita de entradas
+- Ideal para usarse con automatizadores (ex: bots en juegos o tareas repetitivas)
+- Extremadamente ligero y simple
+
+### ⚙️ ...Más scripts próximamente
+
+
