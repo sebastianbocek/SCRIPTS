@@ -1,7 +1,6 @@
 # SCRIPTS 
 
-Este repositorio contiene una colección de **scripts automatizados en Python** pensados para tareas cotidianas, hacking ético, productividad y automatización. Ideales para freelancers, marketers, emprendedores o cualquier entusiasta del poder del código.
-
+Este repositorio contiene una colección de **scripts automatizados en Python** pensados para tareas cotidianas, productividad y automatización. 
 ---
 
 ### 🔐 CypherGram
