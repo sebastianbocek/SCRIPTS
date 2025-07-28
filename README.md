@@ -16,6 +16,12 @@ Este repositorio contiene una colección de **scripts automatizados en Python** 
 
 - Permite calcular el valor de piezas de oro o plata según el peso, quilataje, precio actual por gramo y margen de ganancia.
 
+### 📲 WhatsApp Extractor
+
+> Genera links de WhatsApp a partir de números telefónicos de Argentina, Paraguay y Chile.
+
+- Genera archivo whatsapplinks.txt con cada link.
+
 ### 📧 Automated Email Sender
 > Envío masivo de correos personalizados en segundos.
 
