@@ -10,6 +10,12 @@ Este repositorio contiene una colección de **scripts automatizados en Python** 
 - Clave secreta compartida entre vos y tu contacto
 - Ideal para enviar mensajes seguros por cualquier medio
 
+### 💍 Gold & Silver Price Calculator for Jewelers
+
+> Calculadora profesional en Python y HTML para **joyeros y comerciantes de metales preciosos**.
+
+- Permite calcular el valor de piezas de oro o plata según el peso, quilataje, precio actual por gramo y margen de ganancia.
+
 ### 📧 Automated Email Sender
 > Envío masivo de correos personalizados en segundos.
 
