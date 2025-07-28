@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora de Oro y Plata - Joyas Bocek</title>
+  <style>
+    :root {
+      --primary-color: #007bff;
+      --secondary-color: #28a745;
+      --danger-color: #dc3545;
+      --warning-color: #ffc107;
+      --light-color: #f8f9fa;
+      --dark-color: #343a40;
+    }
+    
+    body { 
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+      margin: 0; 
+      padding: 20px; 
+      background: #f4f4f9; 
+      line-height: 1.6;
+    }
+    
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    h2 { 
+      background-color: var(--primary-color); 
+      color: white; 
+      padding: 12px; 
+      border-radius: 8px; 
+      text-align: center;
+      margin-top: 30px;
+    }
+    
+    .calculator { 
+      background: white; 
+      padding: 25px; 
+      margin-bottom: 30px; 
+      border-radius: 10px; 
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    .input-group {
+      margin-bottom: 15px;
+    }
+    
+    label { 
+      display: block; 
+      margin-bottom: 5px; 
+      font-weight: 600; 
+      color: var(--dark-color);
+    }
+    
+    input, select { 
+      width: 100%; 
+      padding: 10px; 
+      border: 2px solid #ddd; 
+      border-radius: 5px; 
+      font-size: 16px;
+    }
+    
+    input:focus, select:focus {
+      border-color: var(--primary-color);
+      outline: none;
+    }
+    
+    button { 
+      margin-top: 20px; 
+      padding: 12px; 
+      width: 100%; 
+      background-color: var(--secondary-color); 
+      color: white; 
+      border: none; 
+      border-radius: 5px; 
+      cursor: pointer; 
+      font-size: 16px;
+      font-weight: bold;
+    }
+    
+    button:hover { 
+      background-color: #218838; 
+    }
+    
+    .result { 
+      margin-top: 20px; 
+      background-color: #e9ecef; 
+      padding: 15px; 
+      border-radius: 5px; 
+      font-weight: bold;
+      border-left: 4px solid var(--primary-color);
+    }
+    
+    .creator { 
+      text-align: center; 
+      font-size: 16px; 
+      font-weight: 600; 
+      color: white; 
+      margin-bottom: 20px; 
+      padding: 15px; 
+      background-color: var(--primary-color); 
+      border-radius: 8px; 
+    }
+    
+    .offers { 
+      margin-top: 20px; 
+      padding: 15px; 
+      background-color: #fff3cd; 
+      border-radius: 5px; 
+      border-left: 4px solid var(--warning-color);
+    }
+    
+    .offer-item {
+      margin-bottom: 15px;
+      padding: 10px;
+      background-color: white;
+      border-radius: 5px;
+      border-left: 3px solid var(--primary-color);
+    }
+    
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    
+    .comparison-table th, .comparison-table td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    
+    .comparison-table th {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    
+    .comparison-table tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+    
+    .profit-badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: bold;
+      background-color: var(--secondary-color);
+      color: white;
+    }
+    
+    .loss-badge {
+      background-color: var(--danger-color);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="creator">
+      <h1>🔹 Joyas Bocek 🔹</h1>
+      <p>Herramienta profesional para cálculo de metales preciosos</p>
+    </div>
+
+    <h2>Calculadora de Oro</h2>
+    <div class="calculator">
+      <div class="input-group">
+        <label for="oroPrecioGramo">Precio del gramo de oro 24K (USD):</label>
+        <input type="number" id="oroPrecioGramo" placeholder="Ej: 70" step="0.01" min="0" />
+      </div>
+      
+      <div class="input-group">
+        <label for="oroPeso">Peso de la pieza (g):</label>
+        <input type="number" id="oroPeso" placeholder="Ej: 15" step="0.01" min="0" />
+      </div>
+      
+      <div class="input-group">
+        <label for="oroQuilataje">Quilataje:</label>
+        <select id="oroQuilataje">
+          <option value="10">10K (41.7% oro puro)</option>
+          <option value="14">14K (58.3% oro puro)</option>
+          <option value="18">18K (75% oro puro)</option>
+          <option value="22">22K (91.6% oro puro)</option>
+          <option value="24" selected>24K (99.9% oro puro)</option>
+        </select>
+      </div>
+      
+      <div class="input-group">
+        <label for="oroGananciaJoyero">Ganancia del joyero por mano de obra (%):</label>
+        <input type="number" id="oroGananciaJoyero" placeholder="Ej: 30" step="0.1" min="0" />
+      </div>
+      
+      <div class="input-group">
+        <label for="oroPrecioOfrecido">Precio público de la pieza (USD):</label>
+        <input type="number" id="oroPrecioOfrecido" placeholder="Ej: 950" step="0.01" min="0" />
+      </div>
+      
+      <div class="input-group">
+        <label for="oroGananciaDeseada">Tu porcentaje de ganancia deseado (%):</label>
+        <input type="number" id="oroGananciaDeseada" placeholder="Ej: 20" step="0.1" min="0" />
+      </div>
+      
+      <div class="input-group">
+        <label for="oroComisionEcommerce">Comisión de ecommerce (%):</label>
+        <input type="number" id="oroComisionEcommerce" placeholder="Ej: 10" step="0.1" min="0" />
+      </div>
+      
+      <button onclick="calcularOro()">Calcular Valor del Oro</button>
+      <div class="result" id="oroResultado"></div>
+    </div>
+
+    <h2>Calculadora de Plata</h2>
+    <div class="calculator">
+      <div class="input-group">
+        <label for="plataPrecioGramo">Precio del gramo de plata 925 (USD):</label>
+        <input type="number" id="plataPrecioGramo" placeholder="Ej: 1.20" step="0.001" min="0" />
+      </div>
+      
+      <div class="input-group">
+        <label for="plataPeso">Peso de la pieza (g):</label>
+        <input type="number" id="plataPeso" placeholder="Ej: 20" step="0.01" min="0" />
+      </div>
+      
+      <div class="input-group">
+        <label for="plataGananciaJoyero">Ganancia del joyero por mano de obra (%):</label>
+        <input type="number" id="plataGananciaJoyero" placeholder="Ej: 25" step="0.1" min="0" />
+      </div>
+      
+      <div class="input-group">
+        <label for="plataPrecioOfrecido">Precio público de la pieza (USD):</label>
+        <input type="number" id="plataPrecioOfrecido" placeholder="Ej: 150" step="0.01" min="0" />
+      </div>
+      
+      <div class="input-group">
+        <label for="plataGananciaDeseada">Tu porcentaje de ganancia deseado (%):</label>
+        <input type="number" id="plataGananciaDeseada" placeholder="Ej: 15" step="0.1" min="0" />
+      </div>
+      
+      <div class="input-group">
+        <label for="plataComisionEcommerce">Comisión de ecommerce (%):</label>
+        <input type="number" id="plataComisionEcommerce" placeholder="Ej: 10" step="0.1" min="0" />
+      </div>
+      
+      <button onclick="calcularPlata()">Calcular Valor de la Plata</button>
+      <div class="result" id="plataResultado"></div>
+    </div>
+
+    <div class="creator">
+      <p>🔹 <strong>Joyas Bocek</strong> - Herramienta profesional para joyeros 🔹</p>
+      <p>© 2023 - Todos los derechos reservados</p>
+    </div>
+  </div>
+
+  <script>
+    // Validación de campos antes del cálculo
+    function validarCampos(campos) {
+      for (const campo of campos) {
+        const value = campo.value.trim();
+        if (value === "" || isNaN(value)) {
+          campo.focus();
+          return false;
+        }
+      }
+      return true;
+    }
+
+    // Formatear números como moneda
+    function formatoMoneda(valor) {
+      return new Intl.NumberFormat('en-US', { 
+        style: 'currency', 
+        currency: 'USD',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }).format(valor);
+    }
+
+    // Formatear porcentajes
+    function formatoPorcentaje(valor) {
+      return new Intl.NumberFormat('en-US', {
+        style: 'percent',
+        minimumFractionDigits: 1,
+        maximumFractionDigits: 1
+      }).format(valor / 100);
+    }
+
+    function generarSugerencias(precioConManoObra, precioSinEcommerce, precioConEcommerce, gananciaDeseada, comisionEcommerce) {
+      const sugerencias = [];
+      const incrementos = [0.95, 1.0, 1.05, 1.10, 1.15];
+      
+      incrementos.forEach((factor, index) => {
+        const oferta = precioConManoObra * factor;
+        const gananciaSinEcom = precioSinEcommerce - oferta;
+        const gananciaConEcom = precioConEcommerce - oferta;
+        const porcentajeGananciaSin = (gananciaSinEcom / oferta) * 100;
+        const porcentajeGananciaCon = (gananciaConEcom / oferta) * 100;
+        
+        let badgeSin = porcentajeGananciaSin >= gananciaDeseada ? 
+          `<span class="profit-badge">+${porcentajeGananciaSin.toFixed(1)}%</span>` : 
+          `<span class="loss-badge">${porcentajeGananciaSin.toFixed(1)}%</span>`;
+          
+        let badgeCon = porcentajeGananciaCon >= gananciaDeseada ? 
+          `<span class="profit-badge">+${porcentajeGananciaCon.toFixed(1)}%</span>` : 
+          `<span class="loss-badge">${porcentajeGananciaCon.toFixed(1)}%</span>`;
+        
+        sugerencias.push(`
+          <div class="offer-item">
+            <strong>Opción ${index + 1}:</strong> Ofrecer ${formatoMoneda(oferta)}<br>
+            <table class="comparison-table">
+              <tr>
+                <th></th>
+                <th>Sin ecommerce</th>
+                <th>Con ecommerce</th>
+              </tr>
+              <tr>
+                <td>Precio de venta</td>
+                <td>${formatoMoneda(precioSinEcommerce)}</td>
+                <td>${formatoMoneda(precioConEcommerce)}</td>
+              </tr>
+              <tr>
+                <td>Ganancia</td>
+                <td>${formatoMoneda(gananciaSinEcom)} ${badgeSin}</td>
+                <td>${formatoMoneda(gananciaConEcom)} ${badgeCon}</td>
+              </tr>
+            </table>
+          </div>
+        `);
+      });
+      
+      return sugerencias;
+    }
+
+    function calcularOro() {
+      const campos = [
+        document.getElementById("oroPrecioGramo"),
+        document.getElementById("oroPeso"),
+        document.getElementById("oroQuilataje"),
+        document.getElementById("oroGananciaJoyero"),
+        document.getElementById("oroPrecioOfrecido"),
+        document.getElementById("oroGananciaDeseada"),
+        document.getElementById("oroComisionEcommerce")
+      ];
+      
+      if (!validarCampos(campos)) {
+        alert("Por favor, completa todos los campos correctamente.");
+        return;
+      }
+      
+      const precioGramo = parseFloat(campos[0].value);
+      const peso = parseFloat(campos[1].value);
+      const quilataje = parseInt(campos[2].value);  // Corregido el nombre de la variable
+      const gananciaJoyero = parseFloat(campos[3].value);
+      const precioOfrecido = parseFloat(campos[4].value);
+      const gananciaDeseada = parseFloat(campos[5].value);
+      const comisionEcommerce = parseFloat(campos[6].value);
+
+      const pureza = quilataje / 24;
+      const gramosOroPuro = peso * pureza;
+      const precioReal = precioGramo * gramosOroPuro;
+      const precioConManoObra = precioReal * (1 + gananciaJoyero / 100);
+
+      // Calcular precio con y sin ecommerce
+      const precioSinEcommerce = precioConManoObra * (1 + gananciaDeseada / 100);
+      const precioConEcommerce = precioSinEcommerce * (1 + comisionEcommerce / 100);
+      
+      // Calcular margen sobre precio ofrecido
+      const margenSobreOfrecido = precioOfrecido > 0 ? 
+        ((precioOfrecido - precioConManoObra) / precioConManoObra) * 100 : 0;
+
+      const sugerencias = generarSugerencias(precioConManoObra, precioSinEcommerce, precioConEcommerce, gananciaDeseada, comisionEcommerce);
+
+      document.getElementById("oroResultado").innerHTML = `
+        <h3>Análisis de la pieza de oro</h3>
+        <p><strong>Contenido de oro puro:</strong> ${gramosOroPuro.toFixed(3)} g (${(pureza * 100).toFixed(1)}% pureza)</p>
+        <p><strong>Valor del oro:</strong> ${formatoMoneda(precioReal)}</p>
+        <p><strong>Precio con mano de obra (${formatoPorcentaje(gananciaJoyero)}):</strong> ${formatoMoneda(precioConManoObra)}</p>
+        <p><strong>Precio sugerido de venta:</strong> 
+          <br>• Sin ecommerce: ${formatoMoneda(precioSinEcommerce)} (${formatoPorcentaje(gananciaDeseada)} ganancia)
+          <br>• Con ecommerce: ${formatoMoneda(precioConEcommerce)} (${formatoPorcentaje(comisionEcommerce)} comisión)
+        </p>
+        ${precioOfrecido > 0 ? `<p><strong>Margen sobre precio ofrecido (${formatoMoneda(precioOfrecido)}):</strong> ${margenSobreOfrecido.toFixed(1)}%</p>` : ''}
+        
+        <div class="offers">
+          <h3>Estrategias de negociación</h3>
+          ${sugerencias.join('')}
+          
+          <div class="offer-item" style="margin-top: 20px;">
+            <strong>💡 Consejo profesional:</strong> 
+            <p>Considera el valor artístico y la demanda de la pieza al negociar. Joyas con diseños únicos o de marcas reconocidas pueden justificar mayores márgenes.</p>
+          </div>
+        </div>
+      `;
+    }
+
+    function calcularPlata() {
+      const campos = [
+        document.getElementById("plataPrecioGramo"),
+        document.getElementById("plataPeso"),
+        document.getElementById("plataGananciaJoyero"),
+        document.getElementById("plataPrecioOfrecido"),
+        document.getElementById("plataGananciaDeseada"),
+        document.getElementById("plataComisionEcommerce")
+      ];
+      
+      if (!validarCampos(campos)) {
+        alert("Por favor, completa todos los campos correctamente.");
+        return;
+      }
+      
+      const precioGramo = parseFloat(campos[0].value);
+      const peso = parseFloat(campos[1].value);
+      const gananciaJoyero = parseFloat(campos[2].value);
+      const precioOfrecido = parseFloat(campos[3].value);
+      const gananciaDeseada = parseFloat(campos[4].value);
+      const comisionEcommerce = parseFloat(campos[5].value);
+
+      const gramosPlataPura = peso * 0.925;
+      const precioReal = precioGramo * gramosPlataPura;
+      const precioConManoObra = precioReal * (1 + gananciaJoyero / 100);
+
+      // Calcular precio con y sin ecommerce
+      const precioSinEcommerce = precioConManoObra * (1 + gananciaDeseada / 100);
+      const precioConEcommerce = precioSinEcommerce * (1 + comisionEcommerce / 100);
+      
+      // Calcular margen sobre precio ofrecido
+      const margenSobreOfrecido = precioOfrecido > 0 ? 
+        ((precioOfrecido - precioConManoObra) / precioConManoObra) * 100 : 0;
+
+      const sugerencias = generarSugerencias(precioConManoObra, precioSinEcommerce, precioConEcommerce, gananciaDeseada, comisionEcommerce);
+
+      document.getElementById("plataResultado").innerHTML = `
+        <h3>Análisis de la pieza de plata</h3>
+        <p><strong>Contenido de plata pura:</strong> ${gramosPlataPura.toFixed(3)} g (92.5% pureza)</p>
+        <p><strong>Valor de la plata:</strong> ${formatoMoneda(precioReal)}</p>
+        <p><strong>Precio con mano de obra (${formatoPorcentaje(gananciaJoyero)}):</strong> ${formatoMoneda(precioConManoObra)}</p>
+        <p><strong>Precio sugerido de venta:</strong> 
+          <br>• Sin ecommerce: ${formatoMoneda(precioSinEcommerce)} (${formatoPorcentaje(gananciaDeseada)} ganancia)
+          <br>• Con ecommerce: ${formatoMoneda(precioConEcommerce)} (${formatoPorcentaje(comisionEcommerce)} comisión)
+        </p>
+        ${precioOfrecido > 0 ? `<p><strong>Margen sobre precio ofrecido (${formatoMoneda(precioOfrecido)}):</strong> ${margenSobreOfrecido.toFixed(1)}%</p>` : ''}
+        
+        <div class="offers">
+          <h3>Estrategias de negociación</h3>
+          ${sugerencias.join('')}
+          
+          <div class="offer-item" style="margin-top: 20px;">
+            <strong>💡 Consejo profesional:</strong> 
+            <p>Las piezas de plata suelen tener mayor margen en el diseño que en el valor del metal. Evalúa cuidadosamente el trabajo artesanal al hacer ofertas.</p>
+          </div>
+        </div>
+      `;
+    }
+    
+    // Cargar valores de ejemplo al hacer doble click en los títulos
+    document.querySelectorAll('h2').forEach(title => {
+      title.addEventListener('dblclick', function() {
+        if (this.textContent.includes('Oro')) {
+          document.getElementById("oroPrecioGramo").value = "70";
+          document.getElementById("oroPeso").value = "15";
+          document.getElementById("oroQuilataje").value = "18";
+          document.getElementById("oroGananciaJoyero").value = "30";
+          document.getElementById("oroPrecioOfrecido").value = "950";
+          document.getElementById("oroGananciaDeseada").value = "20";
+          document.getElementById("oroComisionEcommerce").value = "10";
+        } else {
+          document.getElementById("plataPrecioGramo").value = "1.20";
+          document.getElementById("plataPeso").value = "20";
+          document.getElementById("plataGananciaJoyero").value = "25";
+          document.getElementById("plataPrecioOfrecido").value = "150";
+          document.getElementById("plataGananciaDeseada").value = "15";
+          document.getElementById("plataComisionEcommerce").value = "10";
+        }
+      });
+    });
+  </script>
+</body>
+</html>
